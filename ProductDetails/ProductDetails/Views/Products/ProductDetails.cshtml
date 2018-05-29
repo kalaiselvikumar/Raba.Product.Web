@@ -1,0 +1,32 @@
+﻿@using Kendo.Mvc.UI
+@using Kendo.Mvc.Extensions
+@using Kendo.DynamicLinq
+@model IEnumerable<ProductDetailsViewModel>
+@*@model IEnumerable<dynamic>*@
+
+
+@(Html.Kendo().Grid(Model).Name("ProductDet")
+    .Columns(c =>
+    {
+        c.Bound(p => p.ProductId);
+        c.Bound(p => p.Name);
+        c.Bound(p => p.UnitPrice);
+        c.Bound(p => p.UnitsInStock);
+        c.Bound(p => p.Discontinued);
+        c.Bound(p => p.SupplierName);
+        c.Bound(p => p.CategoryName);
+    })
+    .Pageable(
+Page => Page.Refresh(true)
+                    .PageSizes(true)
+                    .PreviousNext(true)
+               )
+    .DataSource(d => d.Ajax()
+      .PageSize(10)
+      .Read(r => r.Action("GetProductDetails", "Products"))
+      .ServerOperation(true)
+               )
+               .Pageable()
+    .Filterable()
+    .Sortable()
+)
